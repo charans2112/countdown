@@ -72,37 +72,118 @@
     <div id="message-container"></div>
     <div id="image-container"><img id="day-image" src="" alt="Memory Image"></div>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Countdown</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 92vh;
+        }
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        #message-container {
+            margin-top: 30px;
+            font-size: 1.8rem;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .reveal {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        #image-container img {
+            width: 250px;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .show-image {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+        }
+        .final-reveal {
+            animation: explode 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🎉 Birthday Countdown 🎉</h1>
+    <p id="countdown"></p>
+    <div id="message-container"></div>
+    <div id="image-container"><img id="day-image" src="" alt="Memory Image"></div>
+
     <script>
-        const birthday = new Date("2025-03-22"); // Change this to the actual birthday
+        function getISTDate() {
+            const now = new Date();
+            const utcOffset = now.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
+            const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+            return new Date(now.getTime() + utcOffset + istOffset);
+        }
+    
+        const birthday = new Date("2025-03-22T00:00:00+05:30"); // Birthday in IST
         const messages = {
-            10: { text: "10 days to go! Get ready! askudasjkjdakd ashdliashdfalshdhla kh dkjasbd adh lia hlihdalksd hasilhd ald basildh askld alsidh alsd alsidh haskld alsid ldd alid las dhlasid hlkdhild fhlisd flsidf hlisdf hld fild fhilae fhilkud hfhskdfh sdkf hsdf hsdkf kjdsfkjsfjks dfsd fku dskf sdkf ksdj bkjs fkjsd fkjsd fkj sdkfjsdkjf kdsjf kjsd jfjkf sdkjf kjs fkjds fkjds gks dkfj sdkfhdskf hsdkj flksd hfk skf h slif hldfs glas fls hfliasfil ashgliads hfis ig j fhls fhlisd fhls fliw hfilds lids hfils ilsdhdfisdhli h lifhaerlify erw9y cbvkibvkiyf 9rrhf  lish cvv dhflrwh fgl9hdsmnvlier hreg i erv ierhfjmsdgv  fsdlin kef ygrfb l9sfslihfg lier hg l9erwbfmvnbiarwreilv9lo4ffm", img: "images/day10.jpg" },
+            10: { text: "10 days to go! Get ready!", img: "images/day10.jpg" },
             9: { text: "9 days left! Excited?", img: "images/day9.jpg" },
             8: { text: "8 days left! Time is flying!", img: "images/day8.jpg" },
             7: { text: "1 week to go!", img: "images/day7.jpg" },
             6: { text: "6 days left! Almost there!", img: "images/day6.jpg" },
             5: { text: "5 days left! Party planning?", img: "images/day5.jpg" },
-            4: { text: "Only 4 days left!The excitement is building, Can you feel the excitement?, and the celebration is getting closer! It’s almost time to celebrate someone truly amazing! 🎉✨, Get ready for an unforgettable birthday! 🎂✨", img: "images/day4.jpg" },
-            3: { text: "3 days left! Gifts ready?", img: "images/day3.jpg" },
+            4: { text: "Only 4 days left! Can you feel the excitement?", img: "images/day4.jpg" },
+            3: { text: "Just 3 more days until the big day! The countdown is getting serious, and so is the excitement is building! 🥳. Can you feel the excitement?, Can you feel the birthday magic in the air?, It’s almost time to celebrate someone truly amazing! 🎉. The best day of the year is right around the corner! 🎁🎈, and the celebration is getting closer! Get ready for an unforgettable birthday! 🎂✨.", img: "images/day3.jpg" },
             2: { text: "2 days left! Cake time!", img: "images/day2.jpg" },
             1: { text: "1 day left! Get hyped!", img: "images/day1.jpg" },
             0: { text: "🎉 Happy Birthday! 🎂🎈🎁", img: "images/happy_birthday.jpg" }
         };
-
+    
         function updateCountdown() {
-            const now = new Date();
+            const now = getISTDate();
             const diff = Math.ceil((birthday - now) / (1000 * 60 * 60 * 24));
             const countdownEl = document.getElementById("countdown");
             const messageContainer = document.getElementById("message-container");
             const imageContainer = document.getElementById("day-image");
-
+    
             if (diff >= 0 && messages.hasOwnProperty(diff)) {
                 countdownEl.textContent = `Only ${diff} days left!`;
                 messageContainer.textContent = messages[diff].text;
                 imageContainer.src = messages[diff].img;
-
+    
                 messageContainer.classList.add("reveal");
                 imageContainer.classList.add("show-image");
-
+    
                 if (diff === 0) {
                     messageContainer.classList.add("final-reveal");
                     setTimeout(() => {
@@ -113,8 +194,11 @@
                 countdownEl.textContent = "The birthday has passed!";
             }
         }
-
+    
         updateCountdown();
-    </script>
+    </script>    
+</body>
+</html>
+
 </body>
 </html>
